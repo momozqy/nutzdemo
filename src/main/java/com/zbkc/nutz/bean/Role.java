@@ -15,8 +15,6 @@ public class Role {
     @Column("角色名称")
     private String name;
 
-
-
     public Long getId() {
         return id;
     }
