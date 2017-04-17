@@ -19,13 +19,6 @@ public class User {
     private String name;
     @Column("密码")
     private String password;
-    @Column("ct")
-    private Date createTime;
-    @Column("ut")
-    private Date updateTime;
-
-    @Column("角色ID")
-    private long roleID;
 
 
     public Long getId() {return id;}
@@ -50,19 +43,4 @@ public class User {
         this.password = password;
     }
 
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
 }

@@ -25,16 +25,6 @@ public class MainSetup implements Setup{
         dao.create(Role_authorize.class,false);
         dao.create(User_Role.class,false);
 
-        //if (dao.count(User.class) == 0)
-        {
-            User user = new User();
-            user.setName("admin");
-            user.setPassword("123456");
-            user.setCreateTime(new Date());
-            user.setUpdateTime(new Date());
-            dao.insert(user);
-        }
-
 
         // 如果没有createTablesInPackage,请检查nutz版本
         Daos.createTablesInPackage(dao, "com.zbkc.nutz", false);
