@@ -1,6 +1,7 @@
 package com.zbkc.nutz.core;
 
-import com.zbkc.nutz.bean.User;
+import com.zbkc.nutz.bean.*;
+
 import org.nutz.dao.Dao;
 import org.nutz.dao.util.Daos;
 import org.nutz.ioc.Ioc;
@@ -17,8 +18,15 @@ public class MainSetup implements Setup{
     public void init(NutConfig nc) {
         Ioc ioc = nc.getIoc();
         Dao dao = ioc.get(Dao.class);
+
         dao.create(User.class,false);
-        if (dao.count(User.class) == 0) {
+        dao.create(Role.class,false);
+        dao.create(Authorize.class,false);
+        dao.create(Role_authorize.class,false);
+        dao.create(User_Role.class,false);
+
+        //if (dao.count(User.class) == 0)
+        {
             User user = new User();
             user.setName("admin");
             user.setPassword("123456");
@@ -26,6 +34,8 @@ public class MainSetup implements Setup{
             user.setUpdateTime(new Date());
             dao.insert(user);
         }
+
+
         // 如果没有createTablesInPackage,请检查nutz版本
         Daos.createTablesInPackage(dao, "com.zbkc.nutz", false);
     }

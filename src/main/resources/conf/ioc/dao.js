@@ -15,6 +15,7 @@ var ioc = {
         events : {
             create : "init",
             depose : 'close'
+
         }
     },
     dao : {
