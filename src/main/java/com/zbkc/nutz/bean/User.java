@@ -10,23 +10,25 @@ import java.util.Date;
 /**
  * Created by momo on 2017/4/14.
  */
-@Table("z_table")
+@Table("用户")
 public class User {
     @Id
     private Long id;
     @Name
-    @Column
+    @Column("用户名称")
     private String name;
-    @Column("passwd")
+    @Column("密码")
     private String password;
     @Column("ct")
     private Date createTime;
     @Column("ut")
     private Date updateTime;
 
-    public Long getId() {
-        return id;
-    }
+    @Column("角色ID")
+    private long roleID;
+
+
+    public Long getId() {return id;}
 
     public void setId(Long id) {
         this.id = id;
