@@ -1,6 +1,7 @@
 package com.zbkc.nutz.controller;
 
 import com.zbkc.nutz.bean.Authorize;
+import com.zbkc.nutz.controller.base.BaseModule;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Dao;
 import org.nutz.dao.QueryResult;
@@ -19,11 +20,8 @@ import org.nutz.mvc.filter.CheckSession;
 @IocBean
 @At("/Authorize")
 @Ok("json")
-@Filters(@By(type=CheckSession.class, args={"UserID", "/"}))
 @Fail("http:500")
-public class AuthorizeModule {
-    @Inject
-    protected Dao dao; // 就这么注入了,有@IocBean它才会生效
+public class AuthorizeModule extends BaseModule{
 
     @At
     public int count() {

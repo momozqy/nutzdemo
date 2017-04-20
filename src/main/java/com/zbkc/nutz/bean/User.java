@@ -1,29 +1,72 @@
 package com.zbkc.nutz.bean;
 
-import org.nutz.dao.entity.annotation.Column;
-import org.nutz.dao.entity.annotation.Id;
-import org.nutz.dao.entity.annotation.Name;
-import org.nutz.dao.entity.annotation.Table;
+import com.zbkc.nutz.bean.base.BasePojo;
+import org.nutz.dao.entity.annotation.*;
 
-import java.util.Date;
+import java.util.List;
 
 /**
  * Created by momo on 2017/4/14.
  */
-@Table("用户")
-public class User {
+@Table("t_user")
+public class User extends BasePojo{
+
     @Id
-    private Long id;
+    protected int id;
     @Name
-    @Column("用户名称")
-    private String name;
-    @Column("密码")
-    private String password;
+    @Column
+    protected String name;
+    @Column("passwd")
+    @ColDefine(width=128)
+    protected String password;
+    @Column
+    protected String salt;
+    @Column
+    private boolean locked;
+    @ManyMany(from="u_id", relation="t_user_role", target=Role.class, to="role_id")
+    protected List<Role> roles;
+    @ManyMany(from="u_id", relation="t_user_permission", target=Permission.class, to="permission_id")
+    protected List<Permission> permissions;
+    @One(target=UserProfile.class, field="id", key="userId")
+    protected UserProfile profile;
 
+    public boolean isLocked() {
+        return locked;
+    }
 
-    public Long getId() {return id;}
+    public void setLocked(boolean locked) {
+        this.locked = locked;
+    }
 
-    public void setId(Long id) {
+    public List<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
+    }
+
+    public List<Permission> getPermissions() {
+        return permissions;
+    }
+
+    public void setPermissions(List<Permission> permissions) {
+        this.permissions = permissions;
+    }
+
+    public UserProfile getProfile() {
+        return profile;
+    }
+
+    public void setProfile(UserProfile profile) {
+        this.profile = profile;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -43,4 +86,11 @@ public class User {
         this.password = password;
     }
 
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
+    }
 }

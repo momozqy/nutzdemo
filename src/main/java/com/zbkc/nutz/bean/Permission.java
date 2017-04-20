@@ -1,15 +1,13 @@
 package com.zbkc.nutz.bean;
 
+/**
+ * Created by momo on 2017/4/18.
+ */
 import com.zbkc.nutz.bean.base.BasePojo;
 import org.nutz.dao.entity.annotation.*;
 
-import java.util.List;
-
-/**
- * Created by momo on 2017/4/14.
- */
-@Table("t_role")
-public class Role extends BasePojo {
+@Table("t_permission")
+public class Permission extends BasePojo {
 
     @Id
     protected long id;
@@ -20,8 +18,6 @@ public class Role extends BasePojo {
     @Column("dt")
     @ColDefine(type = ColType.VARCHAR, width = 500)
     private String description;
-    @ManyMany(from="role_id", relation="t_role_permission", target=Permission.class, to="permission_id")
-    protected List<Permission> permissions;
 
     public long getId() {
         return id;
@@ -53,13 +49,5 @@ public class Role extends BasePojo {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public List<Permission> getPermissions() {
-        return permissions;
-    }
-
-    public void setPermissions(List<Permission> permissions) {
-        this.permissions = permissions;
     }
 }

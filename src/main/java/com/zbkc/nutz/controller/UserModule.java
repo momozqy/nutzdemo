@@ -1,8 +1,9 @@
 package com.zbkc.nutz.controller;
 
 import com.zbkc.nutz.bean.User;
+import com.zbkc.nutz.controller.base.BaseModule;
+import com.zbkc.nutz.service.UserService;
 import org.nutz.dao.Cnd;
-import org.nutz.dao.Dao;
 import org.nutz.dao.QueryResult;
 import org.nutz.dao.pager.Pager;
 import org.nutz.ioc.loader.annotation.Inject;
@@ -22,12 +23,10 @@ import java.util.Date;
 @IocBean
 @At("/user")
 @Ok("json")
-@Filters(@By(type=CheckSession.class, args={"UserID", "/"}))
+@Filters(@By(type=CheckSession.class, args={"me", "/"}))
 @Fail("http:500")
-public class UserModule {
-    @Inject
-    protected Dao dao; // 就这么注入了,有@IocBean它才会生效
-
+public class UserModule extends BaseModule{
+    @Inject protected UserService userService;
     @At
     public int count() {
         return dao.count(User.class);
@@ -39,19 +38,20 @@ public class UserModule {
 //        return true;
 //    }
 //
-//    @At("/")
-//    @Ok("jsp:jsp.list")
-//    public void index(){
-//    }
+    @At("/")
+    @Ok("jsp:jsp.list")
+    public void index(){
+    }
     @At
     @Filters// 覆盖UserModule类的@Filter设置,因为登陆可不能要求是个已经登陆的Session
     public Object login(@Param("username")String name, @Param("password")String password, HttpSession session) {
-        User user = dao.fetch(User.class, Cnd.where("name", "=", name).and("password", "=", password));
-        if (user == null) {
-            return false;
+        int userid = userService.fetch(name,password);
+        NutMap re = new NutMap();
+        if (userid < 0) {
+            return re.setv("ok", false).setv("msg", "用户名或密码错误");
         } else {
-            session.setAttribute("UserID", user.getId());
-            return true;
+            session.setAttribute("me", userid);
+            return re.setv("ok", true);
         }
     }
     @At
@@ -66,8 +66,8 @@ public class UserModule {
         if (msg != null){
             return re.setv("ok", false).setv("msg", msg);
         }
-//        user.setCreateTime(new Date());
-//        user.setUpdateTime(new Date());
+        user.setCreateTime(new Date());
+        user.setUpdateTime(new Date());
         user = dao.insert(user);
         return re.setv("ok", true).setv("data", user);
     }
@@ -102,9 +102,9 @@ public class UserModule {
         if (msg != null){
             return re.setv("ok", false).setv("msg", msg);
         }
-        user.setName(null);// 不允许更新用户名
-//        user.setCreateTime(null);//也不允许更新创建时间
-//        user.setUpdateTime(new Date());// 设置正确的更新时间
+//        user.setName(null);// 不允许更新用户名
+        user.setCreateTime(null);//也不允许更新创建时间
+        user.setUpdateTime(new Date());// 设置正确的更新时间
         dao.updateIgnoreNull(user);// 真正更新的其实只有password和salt
         return re.setv("ok", true);
     }
